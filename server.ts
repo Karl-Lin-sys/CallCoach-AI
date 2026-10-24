@@ -1,3 +1,4 @@
+import { localApiOnly } from './local-api-guard.mjs';
 import express from 'express';
 import path from 'path';
 import multer from 'multer';
@@ -5,6 +6,7 @@ import { GoogleGenAI, Type } from '@google/genai';
 import { createServer as createViteServer } from 'vite';
 
 const app = express();
+app.use('/api', localApiOnly(() => PORT));
 const PORT = 3000;
 
 // Multer for memory storage
@@ -127,7 +129,7 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  app.listen(PORT, '127.0.0.1', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
   });
 }
